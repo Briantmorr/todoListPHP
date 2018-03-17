@@ -21,6 +21,29 @@ tu.username as todoOwner
     JOIN todousers as tu
    	 ON td.owner = tu.ID
     WHERE td.status = 'active'";
-$result = mysqli_query($conn, $query);
-print('this is the result'.$result);
+
+ $result = mysqli_query($conn, $query);
+$output = [
+    'success'=> false,
+    'error' => [],
+    'data' => []
+];
+if($result){
+    if(mysqli_num_rows($result)> 0){
+        while($row = mysqli_fetch_assoc($result)){
+            $output['data'][] = $row;
+            console.log('hello');
+        }
+    }
+    else{
+        $output['errors'][] = 'NO Data available';
+    }
+    $output['success'] = true;
+}
+else{
+    $output['errors'][] = 'Error in database query';
+}
+
+$json_output = json_encode($output);
+print($json_output);
 ?>
